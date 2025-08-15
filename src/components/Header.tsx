@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Youtube, Sparkles, Zap } from "lucide-react";
+import { ProFeaturesModal } from "./ProFeaturesModal";
+import { useState } from "react";
 
 export const Header = () => {
+  const [showProModal, setShowProModal] = useState(false);
+
   return (
     <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
@@ -25,12 +29,23 @@ export const Header = () => {
               <Zap className="w-4 h-4" />
               <span className="text-sm font-medium">Instant Generation</span>
             </div>
-            <Button variant="outline" size="sm">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => setShowProModal(true)}
+              className="border-primary/30 text-primary hover:bg-primary/10"
+            >
+              <Sparkles className="w-4 h-4 mr-1" />
               Pro Features
             </Button>
           </div>
         </div>
       </div>
+      
+      <ProFeaturesModal 
+        open={showProModal} 
+        onOpenChange={setShowProModal} 
+      />
     </header>
   );
 };

@@ -6,8 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { ImageIcon, Download, Sparkles, Wand2 } from "lucide-react";
+import { ImageIcon, Download, Sparkles, Wand2, Crown } from "lucide-react";
 import { toast } from "sonner";
+import { ProFeaturesModal } from "./ProFeaturesModal";
 
 interface AspectRatio {
   label: string;
@@ -15,12 +16,17 @@ interface AspectRatio {
   width: number;
   height: number;
   description: string;
+  isPro?: boolean;
 }
 
 const aspectRatios: AspectRatio[] = [
-  { label: "16:9", value: "16:9", width: 1280, height: 720, description: "YouTube Thumbnail" },
-  { label: "9:16", value: "9:16", width: 720, height: 1280, description: "YouTube Shorts" },
-  { label: "1:1", value: "1:1", width: 1024, height: 1024, description: "Square Format" },
+  { label: "16:9", value: "16:9", width: 1280, height: 720, description: "YouTube Thumbnail", isPro: false },
+  { label: "9:16", value: "9:16", width: 720, height: 1280, description: "YouTube Shorts", isPro: false },
+  { label: "1:1", value: "1:1", width: 1024, height: 1024, description: "Square Format", isPro: false },
+  { label: "4:3", value: "4:3", width: 1440, height: 1080, description: "Classic TV", isPro: true },
+  { label: "21:9", value: "21:9", width: 2560, height: 1080, description: "Ultrawide", isPro: true },
+  { label: "3:4", value: "3:4", width: 1080, height: 1440, description: "Portrait", isPro: true },
+  { label: "2:1", value: "2:1", width: 2048, height: 1024, description: "Cinema", isPro: true },
 ];
 
 interface GeneratedImage {
@@ -35,6 +41,7 @@ export const ThumbnailGenerator = () => {
   const [selectedRatio, setSelectedRatio] = useState<AspectRatio>(aspectRatios[0]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImages, setGeneratedImages] = useState<GeneratedImage[]>([]);
+  const [showProModal, setShowProModal] = useState(false);
 
   const generateThumbnail = async () => {
     if (!prompt.trim()) {
@@ -113,11 +120,26 @@ export const ThumbnailGenerator = () => {
                     <Button
                       key={ratio.value}
                       variant={selectedRatio.value === ratio.value ? "default" : "outline"}
-                      onClick={() => setSelectedRatio(ratio)}
-                      className="h-auto p-3 flex-col gap-1"
+                      onClick={() => {
+                        if (ratio.isPro) {
+                          setShowProModal(true);
+                        } else {
+                          setSelectedRatio(ratio);
+                        }
+                      }}
+                      className={`h-auto p-3 flex-col gap-1 ${ratio.isPro ? 'opacity-60' : ''}`}
+                      disabled={ratio.isPro}
                     >
-                      <span className="font-semibold">{ratio.label}</span>
+                      <div className="flex items-center gap-1">
+                        <span className="font-semibold">{ratio.label}</span>
+                        {ratio.isPro && <Crown className="w-3 h-3 text-primary" />}
+                      </div>
                       <span className="text-xs opacity-75">{ratio.description}</span>
+                      {ratio.isPro && (
+                        <Badge variant="secondary" className="text-xs mt-1">
+                          Pro
+                        </Badge>
+                      )}
                     </Button>
                   ))}
                 </div>
@@ -135,23 +157,37 @@ export const ThumbnailGenerator = () => {
                 </div>
               </div>
 
-              <Button
-                onClick={generateThumbnail}
-                disabled={isGenerating || !prompt.trim()}
-                className="w-full bg-gradient-primary hover:bg-gradient-primary/90 text-white font-semibold py-6"
-              >
-                {isGenerating ? (
-                  <>
-                    <Wand2 className="w-5 h-5 mr-2 animate-spin" />
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-5 h-5 mr-2" />
-                    Generate Thumbnail
-                  </>
-                )}
-              </Button>
+              <div className="space-y-3">
+                <Button
+                  onClick={generateThumbnail}
+                  disabled={isGenerating || !prompt.trim()}
+                  className="w-full bg-gradient-primary hover:bg-gradient-primary/90 text-white font-semibold py-6"
+                >
+                  {isGenerating ? (
+                    <>
+                      <Wand2 className="w-5 h-5 mr-2 animate-spin" />
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-5 h-5 mr-2" />
+                      Generate Thumbnail
+                    </>
+                  )}
+                </Button>
+                
+                <div className="text-center">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowProModal(true)}
+                    className="text-primary hover:text-primary/80"
+                  >
+                    <Crown className="w-4 h-4 mr-1" />
+                    Unlock Pro Features
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -198,6 +234,11 @@ export const ThumbnailGenerator = () => {
           </div>
         </div>
       )}
+      
+      <ProFeaturesModal 
+        open={showProModal} 
+        onOpenChange={setShowProModal} 
+      />
     </div>
   );
 };
