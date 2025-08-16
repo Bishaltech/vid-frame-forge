@@ -21,14 +21,15 @@ export const Header = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-6">
-            <div className="flex items-center gap-2 text-primary">
-              <Sparkles className="w-4 h-4" />
-              <span className="text-sm font-medium">AI-Powered</span>
-            </div>
-            <div className="flex items-center gap-2 text-primary">
-              <Zap className="w-4 h-4" />
-              <span className="text-sm font-medium">Instant Generation</span>
-            </div>
+            <button className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+              Contact Us
+            </button>
+            <button className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+              About Us
+            </button>
+            <button className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+              Help
+            </button>
             <Button 
               variant="outline" 
               size="sm"
