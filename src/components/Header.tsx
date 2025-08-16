@@ -1,10 +1,16 @@
 import { Button } from "@/components/ui/button";
-import { Youtube, Sparkles, Zap } from "lucide-react";
+import { Youtube, Sparkles } from "lucide-react";
 import { ProFeaturesModal } from "./ProFeaturesModal";
+import { ContactModal } from "./ContactModal";
+import { AboutModal } from "./AboutModal";
+import { HelpModal } from "./HelpModal";
 import { useState } from "react";
 
 export const Header = () => {
   const [showProModal, setShowProModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [showAboutModal, setShowAboutModal] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
 
   return (
     <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
@@ -21,13 +27,22 @@ export const Header = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-6">
-            <button className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+            <button 
+              onClick={() => setShowContactModal(true)}
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+            >
               Contact Us
             </button>
-            <button className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+            <button 
+              onClick={() => setShowAboutModal(true)}
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+            >
               About Us
             </button>
-            <button className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+            <button 
+              onClick={() => setShowHelpModal(true)}
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+            >
               Help
             </button>
             <Button 
@@ -46,6 +61,18 @@ export const Header = () => {
       <ProFeaturesModal 
         open={showProModal} 
         onOpenChange={setShowProModal} 
+      />
+      <ContactModal 
+        open={showContactModal} 
+        onOpenChange={setShowContactModal} 
+      />
+      <AboutModal 
+        open={showAboutModal} 
+        onOpenChange={setShowAboutModal} 
+      />
+      <HelpModal 
+        open={showHelpModal} 
+        onOpenChange={setShowHelpModal} 
       />
     </header>
   );
