@@ -52,31 +52,36 @@ export const ThumbnailGenerator = () => {
     }
 
     setIsGenerating(true);
-    toast.info("Generating 3 professional thumbnails...");
+    toast.info("Generating 3 professional thumbnails with AI...");
 
     try {
-      // This would integrate with your AI image generation service
-      // For now, we'll simulate the generation process
-      await new Promise(resolve => setTimeout(resolve, 4000));
+      const response = await fetch('/functions/v1/generate-thumbnail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title,
+          prompt,
+          aspectRatio: selectedRatio.value,
+          numberResults: 3
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate thumbnails');
+      }
+
+      const data = await response.json();
       
-      // Generate 3 different thumbnails
-      const thumbnailUrls = [
-        "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=1280&h=720&fit=crop&crop=center",
-        "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1280&h=720&fit=crop&crop=center",
-        "https://images.unsplash.com/photo-1542751110-97427bbecf20?w=1280&h=720&fit=crop&crop=center"
-      ];
+      if (data.error) {
+        throw new Error(data.error);
+      }
 
-      const newImages: GeneratedImage[] = thumbnailUrls.map((url, index) => ({
-        url,
-        title,
-        prompt,
-        ratio: selectedRatio.value,
-        timestamp: Date.now() + index
-      }));
-
-      setGeneratedImages(prev => [...newImages, ...prev]);
-      toast.success("3 thumbnails generated successfully!");
+      setGeneratedImages(prev => [...data.images, ...prev]);
+      toast.success("3 AI-generated thumbnails created successfully!");
     } catch (error) {
+      console.error('Error generating thumbnails:', error);
       toast.error("Failed to generate thumbnails. Please try again.");
     } finally {
       setIsGenerating(false);
