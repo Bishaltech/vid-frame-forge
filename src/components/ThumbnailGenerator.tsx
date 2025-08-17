@@ -55,10 +55,12 @@ export const ThumbnailGenerator = () => {
     toast.info("Generating 3 professional thumbnails with AI...");
 
     try {
-      const response = await fetch('/functions/v1/generate-thumbnail', {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.supabase.co';
+      const response = await fetch(`${supabaseUrl}/functions/v1/generate-thumbnail`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY || ''}`,
         },
         body: JSON.stringify({
           title,
@@ -69,7 +71,16 @@ export const ThumbnailGenerator = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate thumbnails');
+        const errorText = await response.text();
+        console.error('Response error:', errorText);
+        throw new Error(`Failed to generate thumbnails: ${response.status}`);
+      }
+
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const responseText = await response.text();
+        console.error('Non-JSON response:', responseText);
+        throw new Error('Server returned invalid response format');
       }
 
       const data = await response.json();
@@ -194,12 +205,12 @@ export const ThumbnailGenerator = () => {
                   {isGenerating ? (
                     <>
                       <Wand2 className="w-5 h-5 mr-2 animate-spin" />
-                      Generating 3 Thumbnails...
+                      Generating Thumbnails...
                     </>
                   ) : (
                     <>
                       <Sparkles className="w-5 h-5 mr-2" />
-                      Generate 3 Thumbnails
+                      Generate Thumbnails
                     </>
                   )}
                 </Button>
