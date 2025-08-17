@@ -31,12 +31,14 @@ const aspectRatios: AspectRatio[] = [
 
 interface GeneratedImage {
   url: string;
+  title: string;
   prompt: string;
   ratio: string;
   timestamp: number;
 }
 
 export const ThumbnailGenerator = () => {
+  const [title, setTitle] = useState("");
   const [prompt, setPrompt] = useState("");
   const [selectedRatio, setSelectedRatio] = useState<AspectRatio>(aspectRatios[0]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -44,30 +46,38 @@ export const ThumbnailGenerator = () => {
   const [showProModal, setShowProModal] = useState(false);
 
   const generateThumbnail = async () => {
-    if (!prompt.trim()) {
-      toast.error("Please enter a description for your thumbnail");
+    if (!title.trim() || !prompt.trim()) {
+      toast.error("Please enter both title and description for your thumbnail");
       return;
     }
 
     setIsGenerating(true);
-    toast.info("Generating your professional thumbnail...");
+    toast.info("Generating 3 professional thumbnails...");
 
     try {
       // This would integrate with your AI image generation service
       // For now, we'll simulate the generation process
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise(resolve => setTimeout(resolve, 4000));
       
-      const newImage: GeneratedImage = {
-        url: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=1280&h=720&fit=crop&crop=center",
+      // Generate 3 different thumbnails
+      const thumbnailUrls = [
+        "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=1280&h=720&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1280&h=720&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1542751110-97427bbecf20?w=1280&h=720&fit=crop&crop=center"
+      ];
+
+      const newImages: GeneratedImage[] = thumbnailUrls.map((url, index) => ({
+        url,
+        title,
         prompt,
         ratio: selectedRatio.value,
-        timestamp: Date.now()
-      };
+        timestamp: Date.now() + index
+      }));
 
-      setGeneratedImages(prev => [newImage, ...prev]);
-      toast.success("Thumbnail generated successfully!");
+      setGeneratedImages(prev => [...newImages, ...prev]);
+      toast.success("3 thumbnails generated successfully!");
     } catch (error) {
-      toast.error("Failed to generate thumbnail. Please try again.");
+      toast.error("Failed to generate thumbnails. Please try again.");
     } finally {
       setIsGenerating(false);
     }
@@ -100,6 +110,19 @@ export const ThumbnailGenerator = () => {
 
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-4">
+              <div>
+                <Label htmlFor="title" className="text-foreground font-medium">
+                  Thumbnail Title
+                </Label>
+                <Input
+                  id="title"
+                  placeholder="Enter your thumbnail title (e.g., EPIC WIN, AMAZING TRICK, etc.)"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="mt-2"
+                />
+              </div>
+
               <div>
                 <Label htmlFor="prompt" className="text-foreground font-medium">
                   Thumbnail Description
@@ -160,18 +183,18 @@ export const ThumbnailGenerator = () => {
               <div className="space-y-3">
                 <Button
                   onClick={generateThumbnail}
-                  disabled={isGenerating || !prompt.trim()}
+                  disabled={isGenerating || !title.trim() || !prompt.trim()}
                   className="w-full bg-gradient-primary hover:bg-gradient-primary/90 text-white font-semibold py-6"
                 >
                   {isGenerating ? (
                     <>
                       <Wand2 className="w-5 h-5 mr-2 animate-spin" />
-                      Generating...
+                      Generating 3 Thumbnails...
                     </>
                   ) : (
                     <>
                       <Sparkles className="w-5 h-5 mr-2" />
-                      Generate Thumbnail
+                      Generate 3 Thumbnails
                     </>
                   )}
                 </Button>
@@ -225,6 +248,7 @@ export const ThumbnailGenerator = () => {
                   </Badge>
                 </div>
                 <div className="p-4">
+                  <h4 className="font-semibold text-foreground mb-1">{image.title}</h4>
                   <p className="text-sm text-muted-foreground line-clamp-2">
                     {image.prompt}
                   </p>
