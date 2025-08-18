@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { ImageIcon, Download, Sparkles, Wand2, Crown } from "lucide-react";
 import { toast } from "sonner";
 import { ProFeaturesModal } from "./ProFeaturesModal";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AspectRatio {
   label: string;
@@ -55,38 +56,22 @@ export const ThumbnailGenerator = () => {
     toast.info("Generating 3 professional thumbnails with AI...");
 
     try {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.supabase.co';
-      const response = await fetch(`${supabaseUrl}/functions/v1/generate-thumbnail`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY || ''}`,
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('generate-thumbnail', {
+        body: {
           title,
           prompt,
           aspectRatio: selectedRatio.value,
           numberResults: 3
-        }),
+        }
       });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Response error:', errorText);
-        throw new Error(`Failed to generate thumbnails: ${response.status}`);
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw new Error(`Failed to generate thumbnails: ${error.message}`);
       }
 
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        const responseText = await response.text();
-        console.error('Non-JSON response:', responseText);
-        throw new Error('Server returned invalid response format');
-      }
-
-      const data = await response.json();
-      
-      if (data.error) {
-        throw new Error(data.error);
+      if (!data || !data.images) {
+        throw new Error('No images returned from the API');
       }
 
       setGeneratedImages(prev => [...data.images, ...prev]);
