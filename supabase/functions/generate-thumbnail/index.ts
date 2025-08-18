@@ -89,14 +89,15 @@ serve(async (req) => {
 })
 
 function getDimensions(aspectRatio: string) {
+  // Using Stability AI SDXL valid dimensions only
   const ratioMap: Record<string, { width: number; height: number }> = {
-    '16:9': { width: 1024, height: 576 },
-    '9:16': { width: 576, height: 1024 },
-    '1:1': { width: 1024, height: 1024 },
-    '4:3': { width: 1024, height: 768 },
-    '21:9': { width: 1024, height: 438 },
-    '3:4': { width: 768, height: 1024 },
-    '2:1': { width: 1024, height: 512 },
+    '16:9': { width: 1344, height: 768 }, // Valid SDXL dimension closest to 16:9
+    '9:16': { width: 768, height: 1344 }, // Valid SDXL dimension closest to 9:16
+    '1:1': { width: 1024, height: 1024 }, // Perfect square
+    '4:3': { width: 1152, height: 896 },  // Valid SDXL dimension closest to 4:3
+    '21:9': { width: 1536, height: 640 }, // Valid SDXL dimension closest to 21:9
+    '3:4': { width: 896, height: 1152 },  // Valid SDXL dimension closest to 3:4
+    '2:1': { width: 1216, height: 832 },  // Valid SDXL dimension closest to 2:1
   }
   
   return ratioMap[aspectRatio] || ratioMap['16:9']
