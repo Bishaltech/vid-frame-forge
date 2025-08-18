@@ -6,9 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { ImageIcon, Download, Sparkles, Wand2, Crown } from "lucide-react";
+import { ImageIcon, Download, Sparkles, Wand2, Crown, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { ProFeaturesModal } from "./ProFeaturesModal";
+import { ThumbnailPreviewModal } from "./ThumbnailPreviewModal";
 import { supabase } from "@/integrations/supabase/client";
 
 interface AspectRatio {
@@ -45,6 +46,8 @@ export const ThumbnailGenerator = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImages, setGeneratedImages] = useState<GeneratedImage[]>([]);
   const [showProModal, setShowProModal] = useState(false);
+  const [previewImage, setPreviewImage] = useState<GeneratedImage | null>(null);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   const generateThumbnail = async () => {
     if (!title.trim() || !prompt.trim()) {
@@ -92,6 +95,11 @@ export const ThumbnailGenerator = () => {
     link.click();
     document.body.removeChild(link);
     toast.success("Image downloaded!");
+  };
+
+  const previewImageHandler = (image: GeneratedImage) => {
+    setPreviewImage(image);
+    setShowPreviewModal(true);
   };
 
   return (
@@ -222,7 +230,7 @@ export const ThumbnailGenerator = () => {
         <div className="space-y-6">
           <div className="text-center">
             <h3 className="text-xl font-bold text-foreground">Your Generated Thumbnails</h3>
-            <p className="text-muted-foreground">Click to download in full resolution</p>
+            <p className="text-muted-foreground">Preview or download your thumbnails</p>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -234,7 +242,15 @@ export const ThumbnailGenerator = () => {
                     alt={`Generated thumbnail: ${image.prompt}`}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
+                    <Button
+                      onClick={() => previewImageHandler(image)}
+                      size="sm"
+                      className="bg-white/10 hover:bg-white/20 text-white border border-white/30"
+                    >
+                      <Eye className="w-4 h-4 mr-2" />
+                      Preview
+                    </Button>
                     <Button
                       onClick={() => downloadImage(image.url)}
                       size="sm"
@@ -263,6 +279,12 @@ export const ThumbnailGenerator = () => {
       <ProFeaturesModal 
         open={showProModal} 
         onOpenChange={setShowProModal} 
+      />
+      
+      <ThumbnailPreviewModal
+        image={previewImage}
+        open={showPreviewModal}
+        onOpenChange={setShowPreviewModal}
       />
     </div>
   );
