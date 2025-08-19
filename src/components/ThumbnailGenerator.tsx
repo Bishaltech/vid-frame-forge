@@ -10,6 +10,7 @@ import { ImageIcon, Download, Sparkles, Wand2, Crown, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { ProFeaturesModal } from "./ProFeaturesModal";
 import { ThumbnailPreviewModal } from "./ThumbnailPreviewModal";
+import { ProgressAnimation } from "./ProgressAnimation";
 import { supabase } from "@/integrations/supabase/client";
 
 interface AspectRatio {
@@ -48,6 +49,7 @@ export const ThumbnailGenerator = () => {
   const [showProModal, setShowProModal] = useState(false);
   const [previewImage, setPreviewImage] = useState<GeneratedImage | null>(null);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [showProgress, setShowProgress] = useState(false);
 
   const generateThumbnail = async () => {
     if (!title.trim() || !prompt.trim()) {
@@ -56,6 +58,7 @@ export const ThumbnailGenerator = () => {
     }
 
     setIsGenerating(true);
+    setShowProgress(true);
     toast.info("Generating 3 professional thumbnails with AI...");
 
     try {
@@ -84,6 +87,7 @@ export const ThumbnailGenerator = () => {
       toast.error("Failed to generate thumbnails. Please try again.");
     } finally {
       setIsGenerating(false);
+      setShowProgress(false);
     }
   };
 
@@ -104,6 +108,14 @@ export const ThumbnailGenerator = () => {
 
   return (
     <div className="space-y-8">
+      {/* Progress Animation */}
+      {showProgress && (
+        <ProgressAnimation 
+          isActive={isGenerating}
+          onComplete={() => setShowProgress(false)}
+        />
+      )}
+
       {/* Generation Form */}
       <Card className="p-8 bg-gradient-secondary border-border shadow-card">
         <div className="space-y-6">
