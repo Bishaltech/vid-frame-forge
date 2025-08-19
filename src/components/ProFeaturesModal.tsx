@@ -54,7 +54,7 @@ export const ProFeaturesModal = ({ open, onOpenChange }: ProFeaturesModalProps) 
     },
     {
       name: "Pro",
-      price: "$19",
+      price: "$9",
       period: "month",
       description: "For serious content creators",
       features: features.pro,
