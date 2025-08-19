@@ -18,7 +18,7 @@ export const Header = () => {
               <Youtube className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-sky-500">ELDORADO.AI</h1>
+              <h1 className="text-xl font-bold text-sky-500">Bishal.AI</h1>
               <p className="text-sm text-purple-100">Professional YouTube Thumbnails</p>
             </div>
           </div>
