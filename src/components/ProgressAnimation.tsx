@@ -50,50 +50,40 @@ export const ProgressAnimation = ({ isActive, onComplete, className }: ProgressA
   if (!isActive) return null;
 
   return (
-    <div className={cn("space-y-6 p-8 rounded-lg bg-card border border-border", className)}>
-      {/* Main Title with Glow Effect */}
+    <div className={cn("space-y-3", className)}>
+      {/* Glowing Title */}
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-primary animate-pulse tracking-wide">
+        <h3 className="text-lg font-bold text-primary animate-pulse tracking-wide">
           GENERATING THUMBNAIL
-        </h2>
-        <div className="w-24 h-0.5 bg-gradient-to-r from-primary to-primary/50 mx-auto mt-2 animate-pulse"></div>
+        </h3>
       </div>
 
-      {/* Progress Bar Container */}
-      <div className="space-y-4">
-        <div className="relative">
-          <Progress 
-            value={progress} 
-            className="h-3 bg-muted/50 overflow-hidden"
-          />
+      {/* Slim Progress Bar */}
+      <div className="relative">
+        <div className="h-2 bg-muted/30 rounded-full overflow-hidden">
           <div 
-            className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 via-purple-500 to-primary rounded-full transition-all duration-300 ease-out shadow-lg"
+            className={`h-full rounded-full transition-all duration-300 ease-out ${
+              progress === 100 
+                ? 'bg-gradient-to-r from-green-500 to-green-400' 
+                : 'bg-gradient-to-r from-blue-500 via-purple-500 to-primary'
+            }`}
             style={{ width: `${progress}%` }}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
           </div>
         </div>
-
-        {/* Percentage and Status */}
-        <div className="flex items-center justify-between">
-          <div className="text-lg font-mono font-bold text-primary tabular-nums">
-            {Math.round(progress)}%
-          </div>
-          <div className="text-sm text-muted-foreground animate-fade-in">
-            {getCurrentMessage()}
-          </div>
+        
+        {/* Percentage Counter */}
+        <div className="absolute -top-0.5 right-0 text-sm font-mono font-bold text-primary tabular-nums">
+          {Math.round(progress)}%
         </div>
       </div>
 
-      {/* Visual Enhancement */}
-      <div className="flex justify-center space-x-2">
-        {[...Array(3)].map((_, i) => (
-          <div
-            key={i}
-            className="w-2 h-2 bg-primary rounded-full animate-pulse"
-            style={{ animationDelay: `${i * 0.2}s` }}
-          ></div>
-        ))}
+      {/* Status Message */}
+      <div className="text-center">
+        <div className="text-sm text-muted-foreground animate-pulse">
+          {getCurrentMessage()}
+        </div>
       </div>
     </div>
   );

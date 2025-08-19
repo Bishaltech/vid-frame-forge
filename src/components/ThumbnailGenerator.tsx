@@ -138,9 +138,6 @@ export const ThumbnailGenerator = () => {
     setShowPreviewModal(true);
   };
   return <div className="space-y-8">
-      {/* Progress Animation */}
-      {showProgress && <ProgressAnimation isActive={isGenerating} onComplete={() => setShowProgress(false)} />}
-
       {/* Generation Form */}
       <Card className="p-8 bg-gradient-secondary border-border shadow-card">
         <div className="space-y-6">
@@ -221,6 +218,14 @@ export const ThumbnailGenerator = () => {
                     Unlock Pro Features
                   </Button>
                 </div>
+                
+                {/* Progress Animation - positioned below buttons */}
+                {showProgress && (
+                  <ProgressAnimation 
+                    isActive={isGenerating} 
+                    onComplete={() => setShowProgress(false)} 
+                  />
+                )}
               </div>
             </div>
           </div>
