@@ -155,16 +155,28 @@ export const ThumbnailGenerator = () => {
             <div className="space-y-4">
               <div>
                 <Label htmlFor="title" className="text-foreground font-medium">
-                  Thumbnail Title
+                  Thumbnail Title <span className="text-primary">(will appear on thumbnail)</span>
                 </Label>
-                <Input id="title" placeholder="Enter your thumbnail title (e.g., EPIC WIN, AMAZING TRICK, etc.)" value={title} onChange={e => setTitle(e.target.value)} className="mt-2" />
+                <Input 
+                  id="title" 
+                  placeholder="Enter your thumbnail title (e.g., EPIC WIN, AMAZING TRICK, etc.)" 
+                  value={title} 
+                  onChange={e => setTitle(e.target.value)} 
+                  className="mt-2 bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20 focus:border-primary/50 hover:border-primary/30 transition-all duration-300 hover:shadow-glow/20 rounded-xl" 
+                />
               </div>
 
               <div>
                 <Label htmlFor="prompt" className="text-foreground font-medium">
-                  Thumbnail Description
+                  Thumbnail Description <span className="text-muted-foreground">(be specific)</span>
                 </Label>
-                <Textarea id="prompt" placeholder="A gaming thumbnail with epic background, bold text saying 'EPIC WIN', vibrant colors, dramatic lighting..." value={prompt} onChange={e => setPrompt(e.target.value)} className="min-h-32 mt-2" />
+                <Textarea 
+                  id="prompt" 
+                  placeholder="A gaming thumbnail with epic background, bold text saying 'EPIC WIN', vibrant colors, dramatic lighting..." 
+                  value={prompt} 
+                  onChange={e => setPrompt(e.target.value)} 
+                  className="min-h-32 mt-2 bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20 focus:border-primary/50 hover:border-primary/30 transition-all duration-300 hover:shadow-glow/20 rounded-xl resize-none" 
+                />
               </div>
 
               <div>
