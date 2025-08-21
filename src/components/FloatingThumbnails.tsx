@@ -36,20 +36,29 @@ export const FloatingThumbnails = () => {
       {thumbnails.map((thumb) => (
         <div
           key={thumb.id}
-          className="absolute w-32 h-18 bg-gradient-accent rounded-lg opacity-10 animate-pulse"
+          className="absolute w-40 h-24 rounded-xl opacity-20 animate-pulse backdrop-blur-sm"
           style={{
             left: `${thumb.x}%`,
             top: `${thumb.y}%`,
-            transform: `rotate(${thumb.rotation}deg) scale(${thumb.scale})`,
+            transform: `rotate(${thumb.rotation}deg) scale(${thumb.scale}) translateZ(0)`,
             animationDelay: `${thumb.delay}s`,
-            animationDuration: '4s',
+            animationDuration: '6s',
           }}
         >
-          <div className="w-full h-full bg-gradient-primary rounded-lg shadow-float animate-bounce" 
-               style={{ animationDelay: `${thumb.delay + 1}s`, animationDuration: '6s' }}>
-            <div className="absolute inset-2 bg-muted/20 rounded flex items-center justify-center">
-              <div className="w-8 h-1 bg-primary/40 rounded"></div>
+          <div 
+            className="w-full h-full bg-gradient-primary rounded-xl shadow-premium animate-bounce border border-white/10" 
+            style={{ 
+              animationDelay: `${thumb.delay + 1}s`, 
+              animationDuration: '8s',
+              transform: 'perspective(1000px) rotateX(5deg) rotateY(5deg)',
+            }}
+          >
+            <div className="absolute inset-3 bg-muted/30 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-2 bg-primary/60 rounded-full"></div>
             </div>
+            <div className="absolute inset-x-3 bottom-2 h-1 bg-gradient-to-r from-primary/40 to-accent/40 rounded-full"></div>
+            <div className="absolute top-2 right-2 w-3 h-3 bg-primary/50 rounded-full animate-ping" 
+                 style={{ animationDelay: `${thumb.delay + 2}s`, animationDuration: '3s' }}></div>
           </div>
         </div>
       ))}

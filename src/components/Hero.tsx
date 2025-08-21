@@ -13,8 +13,10 @@ export const Hero = () => {
 
   return (
     <section className="relative py-20 lg:py-32 overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-hero opacity-10" />
+      {/* Enhanced Background with multiple layers */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background/90" />
+      <div className="absolute inset-0 bg-gradient-hero opacity-20" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_hsl(262_90%_65%_/_0.15)_0%,_transparent_50%)]" />
       
       {/* Floating Thumbnails Background */}
       <FloatingThumbnails />
