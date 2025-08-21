@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Zap, Download, Users, Play } from "lucide-react";
-import { FloatingThumbnails3D } from "./FloatingThumbnails3D";
+import { EnhancedFloatingThumbnails } from "./EnhancedFloatingThumbnails";
 import { AnimatedCounter } from "./AnimatedCounter";
 
 export const Hero = () => {
@@ -18,8 +18,8 @@ export const Hero = () => {
       <div className="absolute inset-0 bg-gradient-hero opacity-20" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_hsl(262_90%_65%_/_0.15)_0%,_transparent_50%)]" />
       
-      {/* 3D Floating Thumbnails Background */}
-      <FloatingThumbnails3D />
+      {/* Enhanced 3D Floating Thumbnails Background */}
+      <EnhancedFloatingThumbnails />
       
       {/* Text readability overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-transparent pointer-events-none" />
